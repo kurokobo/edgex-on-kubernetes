@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    org.edgexfoundry.service: edgex-device-virtual
+  name: edgex-device-virtual
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: edgex-device-virtual
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: edgex-device-virtual
+    spec:
+      containers:
+      - image: edgexfoundry/docker-device-virtual-go:1.1.1
+        name: edgex-device-virtual
+        ports:
+        - containerPort: 49990
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: db-data
+        - mountPath: /edgex/logs
+          name: log-data
+        - mountPath: /consul/config
+          name: consul-config
+        - mountPath: /consul/data
+          name: consul-data
+      hostname: edgex-device-virtual
+      restartPolicy: Always
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+      - name: log-data
+        persistentVolumeClaim:
+          claimName: log-data
+      - name: consul-config
+        persistentVolumeClaim:
+          claimName: consul-config
+      - name: consul-data
+        persistentVolumeClaim:
+          claimName: consul-data
+status: {}

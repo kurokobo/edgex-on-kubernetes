@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    org.edgexfoundry.service: edgex-core-data
+  name: edgex-core-data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: edgex-core-data
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: edgex-core-data
+    spec:
+      containers:
+      - env:
+        - name: Clients_CoreData_Host
+          value: edgex-core-data
+        - name: Clients_Logging_Host
+          value: edgex-support-logging
+        - name: EDGEX_SECURITY_SECRET_STORE
+          value: "false"
+        - name: Logging_EnableRemote
+          value: "true"
+        - name: edgex_registry
+          value: consul://edgex-core-consul:8500
+        image: edgexfoundry/docker-core-data-go:1.1.0
+        name: edgex-core-data
+        ports:
+        - containerPort: 48080
+        - containerPort: 5563
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: db-data
+        - mountPath: /edgex/logs
+          name: log-data
+        - mountPath: /consul/config
+          name: consul-config
+        - mountPath: /consul/data
+          name: consul-data
+      hostname: edgex-core-data
+      restartPolicy: Always
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+      - name: log-data
+        persistentVolumeClaim:
+          claimName: log-data
+      - name: consul-config
+        persistentVolumeClaim:
+          claimName: consul-config
+      - name: consul-data
+        persistentVolumeClaim:
+          claimName: consul-data
+status: {}

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    org.edgexfoundry.service: edgex-core-config-seed
+  name: edgex-core-config-seed
+spec:
+  containers:
+  - env:
+    - name: Clients_CoreData_Host
+      value: edgex-core-data
+    - name: Clients_Logging_Host
+      value: edgex-support-logging
+    - name: EDGEX_SECURITY_SECRET_STORE
+      value: "false"
+    - name: Logging_EnableRemote
+      value: "true"
+    - name: edgex_registry
+      value: consul://edgex-core-consul:8500
+    image: edgexfoundry/docker-core-config-seed-go:1.1.0
+    name: edgex-config-seed
+    resources: {}
+    volumeMounts:
+    - mountPath: /data/db
+      name: db-data
+    - mountPath: /edgex/logs
+      name: log-data
+    - mountPath: /consul/config
+      name: consul-config
+    - mountPath: /consul/data
+      name: consul-data
+  hostname: edgex-config-seed
+  restartPolicy: Never
+  volumes:
+  - name: db-data
+    persistentVolumeClaim:
+      claimName: db-data
+  - name: log-data
+    persistentVolumeClaim:
+      claimName: log-data
+  - name: consul-config
+    persistentVolumeClaim:
+      claimName: consul-config
+  - name: consul-data
+    persistentVolumeClaim:
+      claimName: consul-data
+status: {}

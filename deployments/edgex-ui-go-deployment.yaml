@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    org.edgexfoundry.service: edgex-ui-go
+  name: edgex-ui-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: edgex-ui-go
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: edgex-ui-go
+    spec:
+      containers:
+      - image: edgexfoundry/docker-edgex-ui-go:1.1.0
+        name: edgex-ui-go
+        ports:
+        - containerPort: 4000
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: db-data
+        - mountPath: /edgex/logs
+          name: log-data
+        - mountPath: /consul/config
+          name: consul-config
+        - mountPath: /consul/data
+          name: consul-data
+      hostname: edgex-ui-go
+      restartPolicy: Always
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+      - name: log-data
+        persistentVolumeClaim:
+          claimName: log-data
+      - name: consul-config
+        persistentVolumeClaim:
+          claimName: consul-config
+      - name: consul-data
+        persistentVolumeClaim:
+          claimName: consul-data
+status: {}
