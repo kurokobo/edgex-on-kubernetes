@@ -32,9 +32,9 @@ Please note these manifests are working in progress.
     $ kubectl create -f deployments/edgex-core-consul-deployment.yaml
     $ kubectl wait --for=condition=available --timeout=60s deployment edgex-core-consul
     ```
-1. Initialize Consul by running `edgex-core-config-seed`
+1. Initialize Key-Value store of Consul by running `edgex-core-config-seed`
     ```bash
-    $ kubectl create -f deployments/edgex-core-config-seed-pod.yaml
+    $ kubectl create -f pods/edgex-core-config-seed-pod.yaml
     $ kubectl wait --for=condition=initialized --timeout=60s pod edgex-core-config-seed
     ```
 1. Change values to `0.0.0.0` for all of `/edgex/core/1.0/*/Service/Host` in your Consul service. TODO: find better way ...
