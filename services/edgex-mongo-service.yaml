@@ -11,5 +11,6 @@ spec:
     targetPort: 27017
   selector:
     org.edgexfoundry.service: edgex-mongo
+  type: LoadBalancer
 status:
   loadBalancer: {}

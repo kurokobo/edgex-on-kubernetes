@@ -21,27 +21,12 @@ spec:
     name: edgex-config-seed
     resources: {}
     volumeMounts:
-    - mountPath: /data/db
-      name: db-data
     - mountPath: /edgex/logs
       name: log-data
-    - mountPath: /consul/config
-      name: consul-config
-    - mountPath: /consul/data
-      name: consul-data
   hostname: edgex-config-seed
   restartPolicy: Never
   volumes:
-  - name: db-data
-    persistentVolumeClaim:
-      claimName: db-data
   - name: log-data
     persistentVolumeClaim:
       claimName: log-data
-  - name: consul-config
-    persistentVolumeClaim:
-      claimName: consul-config
-  - name: consul-data
-    persistentVolumeClaim:
-      claimName: consul-data
 status: {}

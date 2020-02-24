@@ -29,6 +29,24 @@ spec:
           name: consul-config
         - mountPath: /consul/data
           name: consul-data
+      initContainers:
+        - name: init-edgex-files
+          image: edgexfoundry/docker-edgex-volume:1.1.0
+          command: ["sh", "-c"]
+          args:
+            - cp -a /data/db/* /tmp/data/db;
+              cp -a /edgex/logs/* /tmp/edgex/logs;
+              cp -a /consul/config/* /tmp/consul/config;
+              cp -a /consul/data/* /tmp/consul/data;
+          volumeMounts:
+            - mountPath: /tmp/data/db
+              name: db-data
+            - mountPath: /tmp/edgex/logs
+              name: log-data
+            - mountPath: /tmp/consul/config
+              name: consul-config
+            - mountPath: /tmp/consul/data
+              name: consul-data
       hostname: edgex-files
       restartPolicy: Always
       volumes:

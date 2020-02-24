@@ -24,10 +24,6 @@ spec:
         - containerPort: 8500
         resources: {}
         volumeMounts:
-        - mountPath: /data/db
-          name: db-data
-        - mountPath: /edgex/logs
-          name: log-data
         - mountPath: /consul/config
           name: consul-config
         - mountPath: /consul/data
@@ -35,12 +31,6 @@ spec:
       hostname: edgex-core-consul
       restartPolicy: Always
       volumes:
-      - name: db-data
-        persistentVolumeClaim:
-          claimName: db-data
-      - name: log-data
-        persistentVolumeClaim:
-          claimName: log-data
       - name: consul-config
         persistentVolumeClaim:
           claimName: consul-config
