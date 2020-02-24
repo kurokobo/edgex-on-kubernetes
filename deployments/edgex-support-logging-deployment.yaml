@@ -28,6 +28,8 @@ spec:
           value: "true"
         - name: edgex_registry
           value: consul://edgex-core-consul:8500
+        - name: GODEBUG
+          value: netdns=cgo
         image: edgexfoundry/docker-support-logging-go:1.1.0
         name: edgex-support-logging
         ports:
