@@ -24,18 +24,20 @@ Please note these manifests are working in progress.
     $ ls services/*.yaml | xargs -n 1 kubectl create -f
     $ kubectl get svc
     ```
-1. Create some of Deployments
+1. Initialize shared volumes by running `edgex-files`
     ```bash
-    $ kubectl create -f deployments/edgex-files-deployment.yaml
-    $ kubectl wait --for=condition=available --timeout=60s deployment edgex-files
-
+    $ kubectl create -f pods/edgex-files-pod.yaml
+    $ while [[ $(kubectl get pods edgex-files -o "jsonpath={.status.phase}") != "Succeeded" ]]; do sleep 1; done
+    ```
+1. Create Consul
+    ```bash
     $ kubectl create -f deployments/edgex-core-consul-deployment.yaml
     $ kubectl wait --for=condition=available --timeout=60s deployment edgex-core-consul
     ```
 1. Initialize Key-Value store of Consul by running `edgex-core-config-seed`
     ```bash
     $ kubectl create -f pods/edgex-core-config-seed-pod.yaml
-    $ kubectl wait --for=condition=initialized --timeout=60s pod edgex-core-config-seed
+    $ while [[ $(kubectl get pods edgex-core-config-seed -o "jsonpath={.status.phase}") != "Succeeded" ]]; do sleep 1; done
     ```
 1. Create rest of Deployments
     ```bash
